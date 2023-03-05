@@ -95,7 +95,7 @@ void cscan(int arr[],int n,int p,int max){
 		goto reread;
 	}
 
-	printf("The total seekTime in CSCAN = %d\n",seekTime );
+	printf("Total seekTime in CSCAN = %d\n",seekTime );
 }
 
 void scan(int arr[],int n,int p,int max){
@@ -148,7 +148,7 @@ void scan(int arr[],int n,int p,int max){
 		goto reread;
 	}
 
-	printf("The total seekTime in SCAN = %d\n",seekTime );
+	printf("Total seekTime in SCAN = %d\n",seekTime );
 }
 
 void fcfs(int arr[],int n,int p){
@@ -160,7 +160,7 @@ void fcfs(int arr[],int n,int p){
 		printf("%d => ",arr[i]);
 		p = arr[i];
 	}
-	printf("Total seekTime in FCFS = %d\n", seekTime);
+	printf("\nTotal seekTime in FCFS = %d\n", seekTime);
 }
 
 void main(){
