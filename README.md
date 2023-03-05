@@ -2,7 +2,6 @@
  Most of the programs specified in Operating Systems lab for CSE S4 KTU
 
 ## Programs
-### Cycle 1 (Linux Commands)
 
 ### Cycle 2 (Shell Script)
 1. Write a shell script that computes the gross salary of an employee according to the following rules:<br />   (i) if basic salary is < 1500 then HRA =10% of the basic and DA =90% of the basic.<br />   (ii) If basic salary is >=1500 then HRA =Rs.500 and DA=98% of the basic
