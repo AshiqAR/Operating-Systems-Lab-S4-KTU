@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 
 typedef struct{
@@ -76,6 +75,7 @@ void main(){
 			p[i].flag = 1;
 			a--;
 		}else {
+			printf("%d| * ",time );
 			time++;
 		}
 	}

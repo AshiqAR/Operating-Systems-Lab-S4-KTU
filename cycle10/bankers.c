@@ -9,19 +9,20 @@ int checkService(int avail[],int need[],int n){
 }
 
 void main(){
+    printf("Banker's Algorithm\n");
     printf("Enter the number of process: ");
     int n,r,i,j;
     scanf("%d",&n);
     printf("Enter the number of resources : ");
     scanf("%d",&r);
     int avail[r];
-    printf("Enter the resource vector\n");
+    printf("Enter the available resources vector\n");
     for(i=0;i<r;i++)
         scanf("%d",&avail[i]);
     int alloc[n][r];
     int max[n][r];
     int need[n][r];
-    printf("Enter the alloc matrix\n");
+    printf("Enter the allocation matrix\n");
     for(i=0;i<n;i++){
         for(j=0;j<r;j++){
             scanf("%d",&alloc[i][j]);

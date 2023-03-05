@@ -1,21 +1,33 @@
-#include<stdio.h>
+#include <stdio.h>
 
 typedef struct{
-	int at,bt,wt,tt,pid,flag,new_bt;
+	int pid,at,bt,wt,tt,flag,nat,nbt;
 }Process;
 
-void swap(Process p[],int i,int j){
+void TakeInput(Process p[],int n){
+	for(int i=0;i<n;i++){
+		printf("Arrival Time, Burst time of P%d : ",i);
+		scanf("%d %d",&p[i].at,&p[i].bt);
+		p[i].pid = i;
+		p[i].flag = 0;
+		p[i].nbt = p[i].bt;
+		p[i].nat = p[i].at;
+	}
+}
+
+void swap(Process p[],int i , int j){
 	Process temp;
 	temp = p[i];
 	p[i] = p[j];
 	p[j] = temp;
 }
 
-void sortid(Process p[],int n){
+void sortPid(Process p[],int n){
 	for(int i=1;i<n;i++){
 		for(int j=0;j<n-i;j++){
-			if(p[j].pid > p[j+1].pid)
+			if(p[j].pid > p[j+1].pid){
 				swap(p,j,j+1);
+			}
 		}
 	}
 }
@@ -23,83 +35,88 @@ void sortid(Process p[],int n){
 void sort(Process p[],int n){
 	for(int i=1;i<n;i++){
 		for(int j=0;j<n-i;j++){
-			if(p[j].at>p[j+1].at){
+			if(p[j].nat > p[j+1].nat){
 				swap(p,j,j+1);
 			}
 		}
 	}
 }
 
-void main(){
-	int time=0;
-	printf("Round Robin Scheduling\n");
-	printf("Enter the number of process: ");
-	int n,i,j,q;
-	scanf("%d",&n);
-	Process p[n];
-	
-	for(i=0;i<n;i++){
-		printf("Enter arrival time, burst time of P%d : ",i+1);
-		scanf("%d %d",&p[i].at,&p[i].bt);
-        p[i].new_bt = p[i].bt;
-		p[i].pid = i+1;
-		p[i].flag = 0;
-        p[i].wt = 0;
-        p[i].tt = 0;
+void display(Process p[],int n){
+	printf("\nRound Robin\n\n");
+	printf("Process  AT  BT  WT  TT\n");
+	float w=0,t=0;
+	for(int i=0;i<n;i++){
+		printf("P%d      %3d %3d %3d %3d\n",p[i].pid,p[i].at,p[i].bt,p[i].wt,p[i].tt);
+		t +=p[i].tt;
+		w +=p[i].wt;
 	}
+	w = w/n; t=t/n;
+	printf("Average waiting time = %f\n", w);
+	printf("Average waiting time = %f\n", t);
+}
 
-    printf("Enter the time Quantum : ");
-    scanf("%d",&q);
-    sort(p,n);
+int pRemain(Process p[],int n){
+	for(int i=0;i<n;i++){
+		if(p[i].flag == 0)
+			return 1;
+	}
+	return 0;
+}
 
-    int a = n;
-    printf("\nGANTT CHART\n");
-    while(a!=0){
-        int b=0;
-        for(i=0;i<n;i++){
-            if(p[i].flag==0)
-                b=1;
-        }
-        if(b==0)
-            break;
-        
-        int id;
-        int min_at = 10000;
+int minNextAt(Process p[],int n, int t){
+	int min = 999;
+	for(int i=0;i<n;i++){
+		if((p[i].flag==0) && (p[i].nat > t) && (p[i].nat < min)){
+			min = p[i].nat;
+		}
+	}
+	return min;
+}
 
-        for(i=0;i<n;i++){
-            if(p[i].at < min_at && p[i].flag==0){
-                id = i;
-                min_at = p[i].at;
-            }
-        }
+void RoundRobin(Process p[],int n,int q){
+	int t=0,test;
+	while(pRemain(p,n)){
+		test = 0;
+		for(int i=0;i<n;i++){
+			if((p[i].nat <= t) && (p[i].flag==0)){
+				test = 1;
+				printf("%d| P%d |",t,p[i].pid);
+				if(p[i].nbt <= q){
+					t += p[i].nbt;
+					p[i].flag = 1;
+					p[i].tt = t - p[i].at;
+					p[i].wt = p[i].tt - p[i].bt;
+					p[i].nbt = 0;
+				}
+				else{
+					t += q;
+					p[i].nbt -= q;
+				}
+				p[i].nat = t;
+				break;
+			}
+		}
+		if(test==0){
+			printf("%d|",t);
+			t = minNextAt(p,n,t);
+			printf(" * |");
+		}
+		sort(p,n);
+	}
+	printf("%d",t );
+}
 
-        i = id;
-        b = time;
-        p[i].wt += time-p[i].at;
-        if(p[i].new_bt <= q){
-            time += p[i].new_bt;
-            p[i].new_bt = 0;
-            p[i].flag = 1;
-            a--;
-        }else{
-            time += q;
-            p[i].at = time;
-            p[i].new_bt -= q;
-        }
-        printf("|%d  P%d  %d|",b,p[i].pid,time);
-    }
-
-    printf("\n");
-    sortid(p,n);
-    float wtavg = 0, ttavg = 0;
-    printf("Pno  Arrival_time  Burst_time  Waiting_time  Turnaround_time\n");
-    for(i=0;i<n;i++){
-        p[i].tt = p[i].wt + p[i].bt;
-        printf("%3d  %11d  %9d  %12d  %14d\n",p[i].pid,p[i].at,p[i].bt,p[i].wt,p[i].tt);
-        wtavg += p[i].wt;
-		ttavg += p[i].tt;
-    }
-
-    printf("Average waiting time = %f \n",wtavg/n);
-	printf("Average turnaround time = %f \n",ttavg/n);
+void main(){
+	int n,q;
+	printf("Enter the number of process: ");
+	scanf("%d",&n);
+	printf("Enter the time quantum: ");
+	scanf("%d",&q);
+	Process p[n];
+	TakeInput(p,n);
+	sort(p,n);
+	RoundRobin(p,n,q);
+	sortPid(p,n);
+	display(p,n);
 }
