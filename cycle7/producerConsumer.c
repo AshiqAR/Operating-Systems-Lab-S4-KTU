@@ -14,7 +14,6 @@ void producer(void *args){
     sem_wait(&empty);
     pthread_mutex_lock(&mutex);
     buffer[count] = rand()%50;
-    sleep(rand()%3);
     printf("Producer %d produces %d count = %d\n",*((int *)args),buffer[count],count);
     count++;
     pthread_mutex_unlock(&mutex);
@@ -26,7 +25,6 @@ void consumer(void *args){
     pthread_mutex_lock(&mutex);
     long int i = (long int) args;
     count--;
-    sleep(rand()%3);
     printf("Consumer %d consumed %d\n",*((int *)args),buffer[count]);
     pthread_mutex_unlock(&mutex);
     sem_post(&empty);
