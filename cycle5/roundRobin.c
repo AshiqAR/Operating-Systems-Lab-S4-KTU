@@ -53,7 +53,7 @@ void display(Process p[],int n){
 	}
 	w = w/n; t=t/n;
 	printf("Average waiting time = %f\n", w);
-	printf("Average waiting time = %f\n", t);
+	printf("Average turnaround time = %f\n", t);
 }
 
 int pRemain(Process p[],int n){
